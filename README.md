@@ -63,19 +63,18 @@ $ vagrant package --base 93af1542-857c-4ae1-bd70-187d70b2029f --output ./Boxes/R
 Note: In case `VBoxManage` is not recognized you will need to provide the full path, eg: `/c/Program\ Files/Oracle/VirtualBox/VBoxManage.exe`
 
 ## Starting the Virtual Machines
+Copy `config-template.yaml` to `config.yaml` and update the variables if needed.
 
-
-In root directory and start Vagrant
+In root directory run
 
 ```sh
 
 $ vagrant up
 
 ```
-
-
-The default login for the Flare VM is `analyst:infected`
-The default login for the REMnux VM is `remnux:malware`
+Credentials:
+- Flare VM `analyst:infected`
+- REMnux VM `remnux:malware`
 
 At this point you have a Windows 10 Enterprise 22H2 virtual machine with the following tools installed:
 - [https://github.com/mandiant/flare-vm](https://github.com/mandiant/flare-vm)
@@ -83,7 +82,7 @@ At this point you have a Windows 10 Enterprise 22H2 virtual machine with the fol
 and a REMnux v7 focal VM
 
 ### Notes
-- adjust number of CPUs and amount of memory depending on your local resources in the Vagrant file
+- adjust number of CPUs and amount of memory depending on your local resources in `config.yaml` file
 - vagrant will check if the boxes are present in the `./Boxes` folder and if not it will pull them from the Vagrant cloud
 - Vagrant triggers should disconnect the cable for the primary NICs (NAT interfaces)
 
