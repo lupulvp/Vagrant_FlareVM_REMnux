@@ -74,8 +74,6 @@ $ vagrant up
 ```
 
 
-
-
 The default login for the Flare VM is `analyst:infected`
 The default login for the REMnux VM is `remnux:malware`
 
@@ -87,11 +85,14 @@ and a REMnux v7 focal VM
 ### Notes
 - adjust number of CPUs and amount of memory depending on your local resources in the Vagrant file
 - vagrant will check if the boxes are present in the `./Boxes` folder and if not it will pull them from the Vagrant cloud
+- Vagrant triggers should disconnect the cable for the primary NICs (NAT interfaces)
 
 
 ## IMPORTANT - SAFETY FIRST
 ### Before starting the malware analysis 
-To do this run:
+Make sure the NAT interfaces have the Cable Disconnected for both VMs
+
+If the cable is still connected run:
 ```
 ./scripts/disconnect-nat.sh 
 ```
@@ -99,8 +100,8 @@ This will disconnect the cable for NIC1, NAT network, in each of the Vagrant VMs
 
 You can also run these commands to disconnect the NAT networks from NIC1
 ```
-controlvm "MalLab-Demo-FlareVM" setlinkstate1 off
-controlvm "MalLab-Demo-REMnux" setlinkstate1 off
+VBoxManage controlvm "MalLab-Demo-FlareVM" setlinkstate1 off
+VBoxManage controlvm "MalLab-Demo-REMnux" setlinkstate1 off
 ```
 Or you can do it from the VirtualBox UI.
 
