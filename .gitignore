@@ -1,3 +1,12 @@
+# custom files and folders
+*.box
+*.ova
+output-virtualbox-iso
+packer_cache
+.vagrant
+packer.exe
+config.yaml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

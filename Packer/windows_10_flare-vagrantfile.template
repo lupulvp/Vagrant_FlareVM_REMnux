@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.require_version ">= 1.6.2"
+
+Vagrant.configure("2") do |config|
+    config.vm.define "vagrant-windows-10-preview"
+    config.vm.box = "windows_10_preview"
+    config.vm.communicator = "winrm"
+
+    # Admin user name and password
+    config.winrm.username = "analyst"
+    config.winrm.password = "infected"
+
+    config.vm.guest = :windows
+    config.windows.halt_timeout = 15
+
+    config.vm.provider :virtualbox do |v, override|
+        #v.gui = true
+        v.customize ["modifyvm", :id, "--memory", 8192]
+        v.customize ["modifyvm", :id, "--cpus", 4]
+        v.customize ["setextradata", "global", "GUI/SuppressMessages", "all" ]
+    end
+    
+end
