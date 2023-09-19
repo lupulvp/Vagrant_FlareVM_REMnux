@@ -1,7 +1,7 @@
 stack_name: "MalLab-Demo"
 
-sample_src_path: "https://file-examples.com/storage/fe235481fb64f1ca49a92b5/2017/02/zip_5MB.zip"
-sample_dest_path: "C:\\Users\\analyst\\Desktop\\zip_5MB.zip"
+sample_src_path: "https://github.com/HuskyHacks/PMAT-labs/archive/refs/heads/main.zip"
+sample_dest_path: "C:\\Users\\analyst\\Desktop\\PMAT-labs.zip"
 
 flare_vm_box: "lupulvp/FlareVM-Win10Enterprise22H2"
 flare_vm_box_version: "1.0.0"

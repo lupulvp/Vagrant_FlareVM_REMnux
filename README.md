@@ -44,7 +44,7 @@ $ sudo apt upgrade -y
 ```
 - Enable SSH
 ```sh
-$ sudo systemctl enable --now
+$ sudo systemctl ssh enable --now
 ```
 - Shutdown the REMnux VM
 - Run in termnial
