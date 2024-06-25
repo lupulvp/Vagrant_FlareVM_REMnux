@@ -68,12 +68,6 @@
       "type": "windows-shell"
     },
     {
-      "scripts": [
-        "./windows_10_flare-scripts/debloat-windows.ps1"
-      ],
-      "type": "powershell"
-    },
-    {
       "type": "windows-restart"
     },
     {
