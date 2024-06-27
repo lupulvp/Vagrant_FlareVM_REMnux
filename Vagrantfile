@@ -67,7 +67,7 @@ Vagrant.configure("2") do |config|
     flare.vm.provision "shell", path: "./res/flare/scripts/download-files.ps1", privileged: true, args: "-file_url #{SAMPLE_SRC_PATH} -file_path #{SAMPLE_DEST_PATH}"
 
     # Download sysinternals - as a backup for the Flare packages
-    # flare.vm.provision "shell", path: "./res/flare/scripts/download-files.ps1", privileged: true, args: "-file_url #{SYSINTERNALS_SRC_PATH} -file_path #{SYSINTERNALS_DEST_PATH}"
+    flare.vm.provision "shell", path: "./res/flare/scripts/download-files.ps1", privileged: true, args: "-file_url #{SYSINTERNALS_SRC_PATH} -file_path #{SYSINTERNALS_DEST_PATH}"
 
     # # Install Google Chrome - now included in the Flare packages
     # flare.vm.provision "shell", path: "./res/flare/scripts/install-chrome.ps1", privileged: false
