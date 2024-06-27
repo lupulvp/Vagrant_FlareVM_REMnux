@@ -7,6 +7,9 @@ STACK_NAME = config_file["stack_name"]
 SAMPLE_SRC_PATH = config_file["sample_src_path"]
 SAMPLE_DEST_PATH = config_file["sample_dest_path"]
 
+SYSINTERNALS_SRC_PATH = "https://download.sysinternals.com/files/SysinternalsSuite.zip"
+SYSINTERNALS_DEST_PATH = "C:\\Users\\analyst\\Desktop\\SysinternalsSuite.zip"
+
 FLARE_VM = {
   "name" => "#{STACK_NAME}-FlareVM",
   "box" => File.exist?("./Boxes/FlareVM-Win10Enterprise22H2_virtualbox.box") ? "./Boxes/FlareVM-Win10Enterprise22H2_virtualbox.box" : config_file["flare_vm_box"],
@@ -63,7 +66,10 @@ Vagrant.configure("2") do |config|
     # Download malware samples
     flare.vm.provision "shell", path: "./res/flare/scripts/download-files.ps1", privileged: true, args: "-file_url #{SAMPLE_SRC_PATH} -file_path #{SAMPLE_DEST_PATH}"
 
-    # # Install Google Chrome
+    # Download sysinternals - as a backup for the Flare packages
+    flare.vm.provision "shell", path: "./res/flare/scripts/download-files.ps1", privileged: true, args: "-file_url #{SYSINTERNALS_SRC_PATH} -file_path #{SYSINTERNALS_DEST_PATH}"
+
+    # # Install Google Chrome - now included in the Flare packages
     # flare.vm.provision "shell", path: "./res/flare/scripts/install-chrome.ps1", privileged: false
 
     # Configure Windows network
@@ -74,7 +80,7 @@ Vagrant.configure("2") do |config|
     # flare.vm.provision "file", source: "./res/flare/config/MakeWindows10GreatAgain.reg", destination: "C:\\Users\\analyst\\AppData\\Local\\Temp\\"
     # flare.vm.provision "shell", path: "./res/flare/scripts/MakeWindows10GreatAgain.ps1", privileged: false
 
-    # # Install Sysinternals
+    # # Install Sysinternals - now included in the Flare packages
     # flare.vm.provision "shell", path: "./scripts/install-sysinternals.ps1", privileged: false
 
     # Finished provisioning

@@ -68,15 +68,8 @@
       "type": "windows-shell"
     },
     {
-      "type": "windows-restart"
-    },
-    {
-      "scripts": [
-        "./windows_10_flare-scripts/set-powerplan.ps1",
-        "./windows_10_flare-scripts/disable-windows-defender.ps1",
-        "./windows_10_flare-scripts/flare_install.ps1"
-      ],
-      "type": "powershell"
+      "type": "windows-restart",
+      "restart_timeout": "15m"
     },
     {
       "execute_command": "{{ .Vars }} cmd /c \"{{ .Path }}\"",
@@ -87,6 +80,43 @@
         "./windows_10_flare-scripts/dis-updates.bat"
       ],
       "type": "windows-shell"
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "15m"
+    },
+    {
+      "scripts": [
+        "./windows_10_flare-scripts/set-powerplan.ps1",
+        "./windows_10_flare-scripts/disable-windows-defender.ps1"
+      ],
+      "type": "powershell"
+    },
+    {
+      "scripts": [
+        "./windows_10_flare-scripts/flare_install.ps1"
+      ],
+      "type": "powershell"
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "15m"
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "15m"
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "15m"
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "15m"
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "15m"
     }
   ],
   "variables": {
