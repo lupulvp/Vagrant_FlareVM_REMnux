@@ -8,24 +8,24 @@ SAMPLE_SRC_PATH = config_file["sample_src_path"]
 SAMPLE_DEST_PATH = config_file["sample_dest_path"]
 
 FLARE_VM = {
-  "name" => "#{STACK_NAME}-FlareVM", 
+  "name" => "#{STACK_NAME}-FlareVM",
   "box" => File.exist?("./Boxes/FlareVM-Win10Enterprise22H2_virtualbox.box") ? "./Boxes/FlareVM-Win10Enterprise22H2_virtualbox.box" : config_file["flare_vm_box"],
   "version" => File.exist?("./Boxes/FlareVM-Win10Enterprise22H2_virtualbox.box") ? nil : config_file["flare_vm_box_version"],
-  "username" => "analyst", 
+  "username" => "analyst",
   "password" => "infected",
   "memory" => config_file["flare_vm_memory"],
-  "cpus" => config_file["flare_vm_cpus"], 
+  "cpus" => config_file["flare_vm_cpus"],
   "vram" => 128
 }
 
 REMNUX_VM = {
-  "name" => "#{STACK_NAME}-REMnux", 
+  "name" => "#{STACK_NAME}-REMnux",
   "box" => File.exist?("./Boxes/REMnux-v7-focal_virtualbox.box") ? "./Boxes/REMnux-v7-focal_virtualbox.box" : config_file["remnux_vm_box"],
   "version" => File.exist?("./Boxes/REMnux-v7-focal_virtualbox.box") ? nil : config_file["remnux_vm_box_version"],
-  "username" => "remnux", 
+  "username" => "remnux",
   "password" => "malware",
-  "memory" => config_file["remnux_vm_memory"], 
-  "cpus" => config_file["remnux_vm_cpus"], 
+  "memory" => config_file["remnux_vm_memory"],
+  "cpus" => config_file["remnux_vm_cpus"],
   "vram" => 128
 }
 
@@ -33,7 +33,7 @@ REMNUX_VM = {
 Vagrant.configure("2") do |config|
   # Flare VM
   config.vm.define FLARE_VM["name"] do |flare|
-    flare.vm.box = FLARE_VM["box"]  
+    flare.vm.box = FLARE_VM["box"]
     if FLARE_VM["version"] != nil
       flare.vm.box_version = FLARE_VM["version"]
     end
@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
     flare.vm.network :private_network, virtualbox__intnet: "flarenet", auto_config: false
 
     flare.vm.communicator = "winrm"
-    flare.winrm.basic_auth_only = true    
+    flare.winrm.basic_auth_only = true
     flare.winrm.transport = :plaintext
     flare.winrm.username = FLARE_VM["username"]
     flare.winrm.password = FLARE_VM["password"]
@@ -57,16 +57,32 @@ Vagrant.configure("2") do |config|
     flare.winrm.timeout = 1200
     flare.winrm.retry_limit = 20
 
+    # Provisioning
     flare.vm.provision "shell", inline: "echo 'Provisioning Flare VM...'"
+
+    # Download malware samples
     flare.vm.provision "shell", path: "./res/flare/scripts/download-files.ps1", privileged: true, args: "-file_url #{SAMPLE_SRC_PATH} -file_path #{SAMPLE_DEST_PATH}"
-    flare.vm.provision "shell", path: "./res/flare/scripts/install-chrome.ps1", privileged: false     
+
+    # # Install Google Chrome
+    # flare.vm.provision "shell", path: "./res/flare/scripts/install-chrome.ps1", privileged: false
+
+    # Configure Windows network
     flare.vm.provision "shell", path: "./res/flare/scripts/configure-windows-network.ps1", privileged: true, args: "-adapterName 'Ethernet 2' -ip '10.100.0.105' -gateway '10.100.0.1' -dns '10.100.0.1'"
+
+    # Configure Windows settings
     flare.vm.provision "file", source: "./res/flare/config/shutup10.cfg", destination: "C:\\Users\\analyst\\AppData\\Local\\Temp\\"
-    flare.vm.provision "file", source: "./res/flare/config/MakeWindows10GreatAgain.reg", destination: "C:\\Users\\analyst\\AppData\\Local\\Temp\\"
-    flare.vm.provision "shell", path: "./res/flare/scripts/MakeWindows10GreatAgain.ps1", privileged: false
-    # flare.vm.provision "shell", path: "./scripts/install-sysinternals.ps1", privileged: false 
+    # flare.vm.provision "file", source: "./res/flare/config/MakeWindows10GreatAgain.reg", destination: "C:\\Users\\analyst\\AppData\\Local\\Temp\\"
+    # flare.vm.provision "shell", path: "./res/flare/scripts/MakeWindows10GreatAgain.ps1", privileged: false
+
+    # # Install Sysinternals
+    # flare.vm.provision "shell", path: "./scripts/install-sysinternals.ps1", privileged: false
+
+    # Finished provisioning
     flare.vm.provision "shell", inline: "echo 'Provisioning ended, rebooting...'"
+    # Reboot the VM
     flare.vm.provision :reload
+
+    flare.vbguest.auto_update = false if Vagrant.has_plugin?("vagrant-vbguest")
 
     flare.vm.provider "virtualbox" do |flare_vb, override|
       flare_vb.gui = true
@@ -81,8 +97,8 @@ Vagrant.configure("2") do |config|
   end
 
   # REMnux VM
-  config.vm.define REMNUX_VM["name"] do |remnux|   
-    remnux.vm.box = REMNUX_VM["box"]  
+  config.vm.define REMNUX_VM["name"] do |remnux|
+    remnux.vm.box = REMNUX_VM["box"]
     if REMNUX_VM["version"] != nil
       remnux.vm.box_version = REMNUX_VM["version"]
     end
@@ -99,15 +115,25 @@ Vagrant.configure("2") do |config|
     remnux.ssh.username = REMNUX_VM["username"]
     remnux.ssh.password = REMNUX_VM["password"]
 
+    # Provisioning
     remnux.vm.provision "shell", inline: "echo 'Provisioning REMnux VM...'"
+
+    # Configure inetsim
     remnux.vm.provision "file", source: "./res/remnux/config/inetsim.conf", destination: "$HOME/inetsim.conf"
+
+    # Configure network
     remnux.vm.provision "file", source: "./res/remnux/config/01-netcfg.yaml", destination: "$HOME/01-netcfg.yaml"
-    remnux.vm.provision "shell", path: "./res/remnux/scripts/remnux-provisioning.sh", privileged: true 
+
+    # Custom provisioning script
+    remnux.vm.provision "shell", path: "./res/remnux/scripts/remnux-provisioning.sh", privileged: true
+
+    # Finished provisioning
     remnux.vm.provision "shell", inline: "echo 'Provisioning ended, rebooting...'"
+    # Reboot the VM
     remnux.vm.provision :reload
 
     remnux.vbguest.auto_update = false if Vagrant.has_plugin?("vagrant-vbguest")
-    
+
     remnux.vm.provider "virtualbox" do |remnux_vb, override|
       remnux_vb.gui = true
       remnux_vb.name = REMNUX_VM["name"]
@@ -118,5 +144,5 @@ Vagrant.configure("2") do |config|
       remnux_vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
       remnux_vb.customize ["setextradata", "global", "GUI/SuppressMessages", "all" ]
     end
-  end  
+  end
 end
