@@ -16,17 +16,16 @@ $ vagrant plugin install vagrant-reload
 ```
 
 ## Building the FlareVM (automatic box creation)
-Install guest additions plugin and move into our working directory.
+Install guest additions plugin and move into our working directory. Build and configure the VM. This will download the Win10 ISO from Microsoft, boot it, and install the necessary tools to configure it. This will take a couple hours so do not feel the need to watch it. Red text may display showing errors but it will handle those by itself. If the are fatal errors the operation will stop and display the reason
 
 ```sh
-
 $ cd Packer
 
-```
+# install packer required plugins
+$ ./packer plugins install github.com/hashicorp/virtualbox
+$ ./packer plugins install github.com/hashicorp/vagrant
 
-Now we build and configure the VM. This will download the Win10 ISO from Microsoft, boot it, and install the necessary tools to configure it. This will take a couple hours so do not feel the need to watch it. Red text may display showing errors but it will handle those by itself. If the are fatal errors the operation will stop and display the reason
-
-```sh
+# run packer build
 $ ./packer build windows_10_flare-packer.json
 
 ```

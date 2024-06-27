@@ -54,7 +54,7 @@
       "keep_input_artifact": false,
       "output": "../Boxes/{{user `box_name`}}_{{.Provider}}.box",
       "type": "vagrant",
-      "vagrantfile_template": "windows_10_flare-vagrantfile.template"
+      "vagrantfile_template": "./windows_10_flare-vagrantfile.template"
     }
   ],
   "provisioners": [

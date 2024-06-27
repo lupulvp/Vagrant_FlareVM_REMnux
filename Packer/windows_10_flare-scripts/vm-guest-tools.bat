@@ -38,7 +38,7 @@ if exist "C:\Users\analyst\VBoxGuestAdditions.iso" (
 )
 
 if not exist "C:\Windows\Temp\VBoxGuestAdditions.iso" (
-  powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object System.Net.WebClient).DownloadFile('https://download.virtualbox.org/virtualbox/6.0.10/VBoxGuestAdditions_6.0.10.iso', 'C:\Windows\Temp\VBoxGuestAdditions.iso')" <NUL
+  powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object System.Net.WebClient).DownloadFile('https://download.virtualbox.org/virtualbox/7.0.18/VBoxGuestAdditions_7.0.18.iso', 'C:\Windows\Temp\VBoxGuestAdditions.iso')" <NUL
 )
 
 cmd /c ""C:\Program Files\7-Zip\7z.exe" x C:\Windows\Temp\VBoxGuestAdditions.iso -oC:\Windows\Temp\virtualbox"
