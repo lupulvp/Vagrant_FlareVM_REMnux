@@ -5,4 +5,4 @@ Unblock-File "C:\Users\analyst\Desktop\install.ps1"
 Set-ExecutionPolicy Unrestricted -Force
 Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 
-C:\Users\analyst\Desktop\install.ps1 -password infected -noWait -noGui -noChecks
+C:\Users\analyst\Desktop\install.ps1 -password infected -noWait -noGui -noChecks -noReboots
