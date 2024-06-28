@@ -67,7 +67,7 @@ Vagrant.configure("2") do |config|
     flare.vm.provision "shell", path: "./res/flare/scripts/download-files.ps1", privileged: true, args: "-file_url #{SAMPLE_SRC_PATH} -file_path #{SAMPLE_DEST_PATH}"
 
     # Download sysinternals - as a backup for the Flare packages
-    flare.vm.provision "shell", path: "./res/flare/scripts/download-files.ps1", privileged: true, args: "-file_url #{SYSINTERNALS_SRC_PATH} -file_path #{SYSINTERNALS_DEST_PATH}"
+    # flare.vm.provision "shell", path: "./res/flare/scripts/download-files.ps1", privileged: true, args: "-file_url #{SYSINTERNALS_SRC_PATH} -file_path #{SYSINTERNALS_DEST_PATH}"
 
     # Configure Windows network
     flare.vm.provision "shell", path: "./res/flare/scripts/configure-windows-network.ps1", privileged: true, args: "-adapterName 'Ethernet 2' -ip '10.100.0.105' -gateway '10.100.0.1' -dns '10.100.0.1'"
@@ -95,52 +95,52 @@ Vagrant.configure("2") do |config|
   end
 
   # REMnux VM
-  config.vm.define REMNUX_VM["name"] do |remnux|
-    remnux.vm.box = REMNUX_VM["box"]
-    if REMNUX_VM["version"] != nil
-      remnux.vm.box_version = REMNUX_VM["version"]
-    end
+  # config.vm.define REMNUX_VM["name"] do |remnux|
+  #   remnux.vm.box = REMNUX_VM["box"]
+  #   if REMNUX_VM["version"] != nil
+  #     remnux.vm.box_version = REMNUX_VM["version"]
+  #   end
 
-    remnux.trigger.after [:up] do |trigger|
-      trigger.info = "Disconnecting NAT network cable to #{REMNUX_VM["name"]}..."
-      trigger.run = {inline: "bash ./scripts/control-nat.sh \"#{REMNUX_VM["name"]}\" \"off\""}
-    end
+  #   remnux.trigger.after [:up] do |trigger|
+  #     trigger.info = "Disconnecting NAT network cable to #{REMNUX_VM["name"]}..."
+  #     trigger.run = {inline: "bash ./scripts/control-nat.sh \"#{REMNUX_VM["name"]}\" \"off\""}
+  #   end
 
-    remnux.vm.hostname = REMNUX_VM["name"]
-    remnux.vm.synced_folder ".", "/vagrant", disabled: true  # disable synced folder
-    remnux.vm.network :private_network, virtualbox__intnet: "flarenet", auto_config: false
+  #   remnux.vm.hostname = REMNUX_VM["name"]
+  #   remnux.vm.synced_folder ".", "/vagrant", disabled: true  # disable synced folder
+  #   remnux.vm.network :private_network, virtualbox__intnet: "flarenet", auto_config: false
 
-    remnux.ssh.username = REMNUX_VM["username"]
-    remnux.ssh.password = REMNUX_VM["password"]
+  #   remnux.ssh.username = REMNUX_VM["username"]
+  #   remnux.ssh.password = REMNUX_VM["password"]
 
-    # Provisioning
-    remnux.vm.provision "shell", inline: "echo 'Provisioning REMnux VM...'"
+  #   # Provisioning
+  #   remnux.vm.provision "shell", inline: "echo 'Provisioning REMnux VM...'"
 
-    # Configure inetsim
-    remnux.vm.provision "file", source: "./res/remnux/config/inetsim.conf", destination: "$HOME/inetsim.conf"
+  #   # Configure inetsim
+  #   remnux.vm.provision "file", source: "./res/remnux/config/inetsim.conf", destination: "$HOME/inetsim.conf"
 
-    # Configure network
-    remnux.vm.provision "file", source: "./res/remnux/config/01-netcfg.yaml", destination: "$HOME/01-netcfg.yaml"
+  #   # Configure network
+  #   remnux.vm.provision "file", source: "./res/remnux/config/01-netcfg.yaml", destination: "$HOME/01-netcfg.yaml"
 
-    # Custom provisioning script
-    remnux.vm.provision "shell", path: "./res/remnux/scripts/remnux-provisioning.sh", privileged: true
+  #   # Custom provisioning script
+  #   remnux.vm.provision "shell", path: "./res/remnux/scripts/remnux-provisioning.sh", privileged: true
 
-    # Finished provisioning
-    remnux.vm.provision "shell", inline: "echo 'Provisioning ended, rebooting...'"
-    # Reboot the VM
-    remnux.vm.provision :reload
+  #   # Finished provisioning
+  #   remnux.vm.provision "shell", inline: "echo 'Provisioning ended, rebooting...'"
+  #   # Reboot the VM
+  #   remnux.vm.provision :reload
 
-    remnux.vbguest.auto_update = false if Vagrant.has_plugin?("vagrant-vbguest")
+  #   remnux.vbguest.auto_update = false if Vagrant.has_plugin?("vagrant-vbguest")
 
-    remnux.vm.provider "virtualbox" do |remnux_vb, override|
-      remnux_vb.gui = true
-      remnux_vb.name = REMNUX_VM["name"]
+  #   remnux.vm.provider "virtualbox" do |remnux_vb, override|
+  #     remnux_vb.gui = true
+  #     remnux_vb.name = REMNUX_VM["name"]
 
-      remnux_vb.customize ["modifyvm", :id, "--memory", REMNUX_VM["memory"]]
-      remnux_vb.customize ["modifyvm", :id, "--cpus", REMNUX_VM["cpus"]]
-      remnux_vb.customize ["modifyvm", :id, "--vram", REMNUX_VM["vram"]]
-      remnux_vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
-      remnux_vb.customize ["setextradata", "global", "GUI/SuppressMessages", "all" ]
-    end
-  end
+  #     remnux_vb.customize ["modifyvm", :id, "--memory", REMNUX_VM["memory"]]
+  #     remnux_vb.customize ["modifyvm", :id, "--cpus", REMNUX_VM["cpus"]]
+  #     remnux_vb.customize ["modifyvm", :id, "--vram", REMNUX_VM["vram"]]
+  #     remnux_vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+  #     remnux_vb.customize ["setextradata", "global", "GUI/SuppressMessages", "all" ]
+  #   end
+  # end
 end
