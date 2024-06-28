@@ -8,6 +8,8 @@
       "disk_size": "{{user `disk_size`}}",
       "floppy_files": [
         "{{user `autounattend`}}",
+        "./windows_10_flare-scripts/WindowsPowershell.lnk",
+        "./windows_10_flare-scripts/PinTo10.exe",
         "./windows_10_flare-scripts/fixnetwork.ps1",
         "./windows_10_flare-scripts/rearm-windows.ps1",
         "./windows_10_flare-scripts/disable-screensaver.ps1",
@@ -38,7 +40,7 @@
           "modifyvm",
           "{{.Name}}",
           "--cpus",
-          "2"
+          "4"
         ]
       ],
       "vm_name": "windows_10_flare",
@@ -73,7 +75,9 @@
       "execute_command": "{{ .Vars }} cmd /c \"{{ .Path }}\"",
       "remote_path": "/tmp/script.bat",
       "scripts": [
-        "./windows_10_flare-scripts/set-winrm-automatic.bat"
+        "./windows_10_flare-scripts/pin-powershell.bat",
+        "./windows_10_flare-scripts/set-winrm-automatic.bat",
+        "./windows_10_flare-scripts/dis-updates.bat"
       ],
       "type": "windows-shell"
     },
@@ -85,6 +89,42 @@
       "scripts": [
         "./windows_10_flare-scripts/set-powerplan.ps1",
         "./windows_10_flare-scripts/disable-windows-defender.ps1"
+      ],
+      "type": "powershell"
+    },
+    {
+      "scripts": [
+        "./windows_10_flare-scripts/flare_install.ps1"
+      ],
+      "type": "powershell"
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "15m"
+    },
+    {
+      "scripts": [
+        "./windows_10_flare-scripts/flare_install.ps1"
+      ],
+      "type": "powershell"
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "15m"
+    },
+    {
+      "scripts": [
+        "./windows_10_flare-scripts/flare_install.ps1"
+      ],
+      "type": "powershell"
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "15m"
+    },
+    {
+      "scripts": [
+        "./windows_10_flare-scripts/flare_install.ps1"
       ],
       "type": "powershell"
     },

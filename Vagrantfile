@@ -69,19 +69,8 @@ Vagrant.configure("2") do |config|
     # Download sysinternals - as a backup for the Flare packages
     flare.vm.provision "shell", path: "./res/flare/scripts/download-files.ps1", privileged: true, args: "-file_url #{SYSINTERNALS_SRC_PATH} -file_path #{SYSINTERNALS_DEST_PATH}"
 
-    # # Install Google Chrome - now included in the Flare packages
-    # flare.vm.provision "shell", path: "./res/flare/scripts/install-chrome.ps1", privileged: false
-
     # Configure Windows network
     flare.vm.provision "shell", path: "./res/flare/scripts/configure-windows-network.ps1", privileged: true, args: "-adapterName 'Ethernet 2' -ip '10.100.0.105' -gateway '10.100.0.1' -dns '10.100.0.1'"
-
-    # Configure Windows settings
-    # flare.vm.provision "file", source: "./res/flare/config/shutup10.cfg", destination: "C:\\Users\\analyst\\AppData\\Local\\Temp\\"
-    # flare.vm.provision "file", source: "./res/flare/config/MakeWindows10GreatAgain.reg", destination: "C:\\Users\\analyst\\AppData\\Local\\Temp\\"
-    # flare.vm.provision "shell", path: "./res/flare/scripts/MakeWindows10GreatAgain.ps1", privileged: false
-
-    # # Install Sysinternals - now included in the Flare packages
-    # flare.vm.provision "shell", path: "./scripts/install-sysinternals.ps1", privileged: false
 
     # Finished provisioning
     flare.vm.provision "shell", inline: "echo 'Provisioning ended, rebooting...'"
