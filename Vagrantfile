@@ -72,6 +72,9 @@ Vagrant.configure("2") do |config|
     # Configure Windows network
     flare.vm.provision "shell", path: "./res/flare/scripts/configure-windows-network.ps1", privileged: true, args: "-adapterName 'Ethernet 2' -ip '10.100.0.105' -gateway '10.100.0.1' -dns '10.100.0.1'"
 
+    # Disable Windows Defender
+    flare.vm.provision "shell", path: "./res/flare/scripts/disable-windows-defender.ps1", privileged: true
+
     # Finished provisioning
     flare.vm.provision "shell", inline: "echo 'Provisioning ended, rebooting...'"
     # Reboot the VM
