@@ -4,7 +4,7 @@
 output-virtualbox-iso
 packer_cache
 .vagrant
-packer.exe
+# packer.exe
 config.yaml
 Demo/**
 Packer/output-*/**
